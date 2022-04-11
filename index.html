@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body{
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            place-items: center;
+            background: #d7d7d7; 
+        }
+        .loader {
+        /* transform: translate(-50%); */
+         border: 16px solid #f3f3f3;
+         border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 1s linear infinite; /* Safari */
+        animation: spin 1s linear infinite;       ;
+}
+
+/* Safari */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* spinner end  */
+        .repo{
+            width:20vw;
+            height: 50vh;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s linear;
+            padding: 20px;
+            display: none;
+        }
+        .load{
+            display: block;
+        }
+        .flags{
+            width: 60%;
+            height: 60%;
+            display: block;
+            margin: auto; 
+        }
+        .name,.capital{
+            text-align: center;
+        }
+        .capital{
+             padding-bottom: 10px;
+        }
+       p{
+           padding: 4px 0;
+           text-align: justify;
+           font-weight: bold;
+       }
+        @media only screen and (max-width:1000px){
+            .repo{
+            width:30vw;
+            height: 50vh;
+          }
+        }
+        @media only screen and (max-width:772px) {
+            .repo{
+            width:40vw;
+            height: 50vh;
+            }
+        }
+        @media only screen and (max-width:550px) {
+            .repo{
+            width:70vw;
+            height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <div class="repo" id="container">
+         <img src="" alt="">
+    </div>
+    <script>
+       const container = document.getElementById('container');
+       const loadder=document.querySelector(".loader");
+
+       const request= new XMLHttpRequest();
+       request.open('GET',"https://restcountries.com/v3.1/name/nepal");
+       request.onload=()=>{
+       container.classList.add("load");
+       loadder.style.display="none";
+    }
+       request.send();
+    //    to get the responce
+    request.addEventListener('load',function(){
+    //   const data=  this.responseText;
+      const [data]=JSON.parse( this.responseText);
+      console.log(data);
+    const HtmlData=`
+          <img src="${data.flags.png}" class="flags" alt="Nepali flag">
+          <h1 class="name">${data.name.common}</h1>
+          <p class="capital">${data.capital[0]}</p>
+          <hr/>
+          <p class="population">Population : ${data.population}</p>
+          <p class="langu"> Language : ${data.languages.nep}</p>
+          <p class="region"> Continent : ${data.region}</p>
+    `;
+    container.innerHTML=HtmlData;
+ })
+    </script>
+</body>
+</html>
